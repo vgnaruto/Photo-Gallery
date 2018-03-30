@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:layout_height="50dp">
     <ImageView
         android:id="@+id/iv_foto"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
     <TextView
         android:id="@+id/tv_judul"
-        android:layout_width="0dp"
-        android:layout_weight="5"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/iv_foto"
+        android:layout_toLeftOf="@id/b_sampah"/>
+    <ImageButton
+        android:src="@drawable/ic_trash"
+        android:id="@+id/b_sampah"
+        android:layout_height="50dp"
+        android:layout_width="50dp"
+        android:scaleType="fitCenter"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"/>
+</RelativeLayout>

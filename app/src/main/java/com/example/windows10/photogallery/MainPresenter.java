@@ -24,4 +24,8 @@ public class MainPresenter {
 //        Log.d("MAINPRESENTER",(dataImages!=null)+"");
         ui.updateList(dataImages);
     }
+    public void delete(int position){
+        dataImages.remove(position);
+        ui.updateList(dataImages);
+    }
 }

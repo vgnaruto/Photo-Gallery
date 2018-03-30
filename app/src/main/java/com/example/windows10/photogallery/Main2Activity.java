@@ -106,4 +106,11 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     public static Main2Activity getInstance(){
         return instance;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        statusSama = 0;
+        MainActivity.indeks = -1;
+    }
 }

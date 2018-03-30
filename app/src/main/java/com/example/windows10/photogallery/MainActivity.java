@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ListView listFoto;
     private FotoAdapter fa;
 
-    private static int indeks = -1;
+    public static int indeks = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,5 +87,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent acitivityIntent = new Intent(this, Main2Activity.class);
         acitivityIntent.putExtras(dataBundle);
         startActivity(acitivityIntent);
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

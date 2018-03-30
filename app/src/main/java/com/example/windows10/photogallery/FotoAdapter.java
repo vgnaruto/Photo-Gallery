@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -63,6 +64,12 @@ public class FotoAdapter extends BaseAdapter {
                 MainActivity.getInstance().edit(dataBundle,position);
             }
         });
+        vh.ibSampah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.delete(position);
+            }
+        });
 
         vh.updateView((DataImage)getItem(position));
 
@@ -80,10 +87,12 @@ public class FotoAdapter extends BaseAdapter {
     private class ViewHolder{
         protected ImageView ivFoto;
         protected TextView tvJudul;
+        protected ImageButton ibSampah;
 
         public ViewHolder(View v){
             this.ivFoto = v.findViewById(R.id.iv_foto);
             this.tvJudul = v.findViewById(R.id.tv_judul);
+            this.ibSampah = v.findViewById(R.id.b_sampah);
         }
 
         public void updateView(DataImage data){
