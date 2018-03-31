@@ -25,7 +25,11 @@ public class MainPresenter {
         ui.updateList(dataImages);
     }
     public void delete(int position){
+        ui.delete(dataImages.get(position));
         dataImages.remove(position);
         ui.updateList(dataImages);
+    }
+    public void setDataImage(ArrayList<DataImage> datas){
+        this.dataImages = datas;
     }
 }

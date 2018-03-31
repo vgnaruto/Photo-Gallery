@@ -1,15 +1,14 @@
 package com.example.windows10.photogallery;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -18,12 +17,14 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static MainActivity instance;
+    private static int isNew = 0;
+    public static DataImage oldData = null;
+    public static int indeks = -1;
 
     private FloatingActionButton addButton;
     private ListView listFoto;
     private FotoAdapter fa;
-
-    public static int indeks = -1;
+    private DBAdapter dbAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,28 +35,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addButton = findViewById(R.id.button_add);
         addButton.setOnClickListener(this);
 
+        dbAdapter = new DBAdapter(this);
+
+
         Intent intentExtra = getIntent();
         Bundle bundle = intentExtra.getExtras();
 
-        if(fa == null) {
-            fa = new FotoAdapter(this);
-            listFoto.setAdapter(fa);
-            fa.presenter.loadData();
+        fa = new FotoAdapter(this);
+        listFoto.setAdapter(fa);
+        if(isNew == 0){
+            isNew = 1;
+            fa.setDataImages(dbAdapter.read());
         }
 
         if (bundle != null) {
             String data = bundle.getString("data");
             Gson gson = new Gson();
             DataImage currentData = gson.fromJson(data, DataImage.class);
-            if(Main2Activity.statusSama==0) {
+            //INSERT
+            if (Main2Activity.statusSama == 0) {
                 fa.addFoto(currentData);
-            }else if(Main2Activity.statusSama == 1 && MainActivity.indeks != -1){
-                fa.updateFoto(currentData,MainActivity.indeks);
+                dbAdapter.insertData(currentData);
+            }
+            //EDIT
+            else if (Main2Activity.statusSama == 1 && MainActivity.indeks != -1) {
+                fa.updateFoto(currentData, MainActivity.indeks);
+                dbAdapter.update(MainActivity.oldData, currentData);
+                MainActivity.oldData = null;
                 Main2Activity.statusSama = 0;
                 MainActivity.indeks = -1;
             }
         }
-
+        fa.presenter.loadData();
         instance = this;
     }
 
@@ -82,11 +93,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listFoto.setAdapter(fa);
     }
 
-    public void edit(Bundle dataBundle, int indeks){
+    public void edit(Bundle dataBundle, int indeks) {
         MainActivity.indeks = indeks;
         Intent acitivityIntent = new Intent(this, Main2Activity.class);
         acitivityIntent.putExtras(dataBundle);
         startActivity(acitivityIntent);
+    }
+
+    public void delete(DataImage data) {
+        dbAdapter.delete(data);
     }
 
     @Override

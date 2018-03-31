@@ -25,10 +25,11 @@ public class FotoAdapter extends BaseAdapter {
     public MainPresenter presenter;
     public MainActivity ui;
 
-    public FotoAdapter(MainActivity ui){
+    public FotoAdapter(MainActivity ui) {
         this.ui = ui;
         presenter = new MainPresenter(dataImages, this.ui);
     }
+
     @Override
     public int getCount() {
         return dataImages.size();
@@ -47,21 +48,22 @@ public class FotoAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
         ViewHolder vh;
-        if(convertView == null){
-            convertView = LayoutInflater.from(MainActivity.getInstance()).inflate(R.layout.list_foto,parent,false);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(MainActivity.getInstance()).inflate(R.layout.list_foto, parent, false);
             vh = new ViewHolder(convertView);
             convertView.setTag(vh);
-        }else{
-            vh = (ViewHolder)convertView.getTag();
+        } else {
+            vh = (ViewHolder) convertView.getTag();
         }
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataImage currentData = (DataImage)getItem(position);
+                DataImage currentData = (DataImage) getItem(position);
                 Bundle dataBundle = new Bundle();
                 Gson gson = new Gson();
-                dataBundle.putString("data",gson.toJson(currentData));
-                MainActivity.getInstance().edit(dataBundle,position);
+                dataBundle.putString("data", gson.toJson(currentData));
+                MainActivity.oldData = currentData;
+                MainActivity.getInstance().edit(dataBundle, position);
             }
         });
         vh.ibSampah.setOnClickListener(new View.OnClickListener() {
@@ -71,35 +73,40 @@ public class FotoAdapter extends BaseAdapter {
             }
         });
 
-        vh.updateView((DataImage)getItem(position));
+        vh.updateView((DataImage) getItem(position));
 
         return convertView;
     }
-    public void addFoto(DataImage data){
+
+    public void addFoto(DataImage data) {
         presenter.addFoto(data);
     }
-    public void setDataImages(ArrayList<DataImage> data){
+
+    public void setDataImages(ArrayList<DataImage> data) {
         this.dataImages = data;
+        presenter.setDataImage(dataImages);
     }
-    public void updateFoto(DataImage data, int posisi){
-        dataImages.set(posisi,data);
+
+    public void updateFoto(DataImage data, int posisi) {
+        dataImages.set(posisi, data);
     }
-    private class ViewHolder{
+
+    private class ViewHolder {
         protected ImageView ivFoto;
         protected TextView tvJudul;
         protected ImageButton ibSampah;
 
-        public ViewHolder(View v){
+        public ViewHolder(View v) {
             this.ivFoto = v.findViewById(R.id.iv_foto);
             this.tvJudul = v.findViewById(R.id.tv_judul);
             this.ibSampah = v.findViewById(R.id.b_sampah);
         }
 
-        public void updateView(DataImage data){
+        public void updateView(DataImage data) {
             Bitmap bitmap = MainActivity.getInstance().base64ToBitmap(data.getImage());
             String judul = data.getJudul();
             this.ivFoto.setImageBitmap(bitmap);
-            this.tvJudul.setText("Judul : "+judul);
+            this.tvJudul.setText("Judul : " + judul);
         }
     }
 }
