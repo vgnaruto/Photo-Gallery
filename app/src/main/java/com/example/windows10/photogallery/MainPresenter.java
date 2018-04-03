@@ -21,7 +21,6 @@ public class MainPresenter {
         MainActivity.getInstance().updateList(dataImages);
     }
     public void loadData(){
-//        Log.d("MAINPRESENTER",(dataImages!=null)+"");
         ui.updateList(dataImages);
     }
     public void delete(int position){

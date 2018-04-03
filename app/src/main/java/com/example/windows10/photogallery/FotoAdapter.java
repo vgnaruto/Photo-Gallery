@@ -1,7 +1,9 @@
 package com.example.windows10.photogallery;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -103,10 +106,45 @@ public class FotoAdapter extends BaseAdapter {
         }
 
         public void updateView(DataImage data) {
-            Bitmap bitmap = MainActivity.getInstance().base64ToBitmap(data.getImage());
+//            Bitmap bitmap = MainActivity.getInstance().base64ToBitmap(data.getPath());
+//            this.ivFoto.setImageBitmap(bitmap);
+            setPic(data);
             String judul = data.getJudul();
-            this.ivFoto.setImageBitmap(bitmap);
             this.tvJudul.setText("Judul : " + judul);
+        }
+
+        private void setPic(DataImage data) {
+            String currentPhotoPath = data.getPath();
+            Matrix matrix = new Matrix();
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            bmOptions.inJustDecodeBounds = false;
+            bmOptions.inSampleSize = 8;
+            bmOptions.inPurgeable = true;
+            BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+            Bitmap bm = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+            try {
+                ExifInterface exif = new ExifInterface(currentPhotoPath);
+                String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+                int orientation = orientString != null ? Integer.parseInt(orientString) : ExifInterface.ORIENTATION_NORMAL;
+
+                int rotationAngle = 0;
+                switch (orientation) {
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        rotationAngle = 90;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        rotationAngle = 180;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        rotationAngle = 270;
+                        break;
+                }
+                matrix.setRotate(rotationAngle,bm.getWidth()/2, bm.getHeight()/2);
+                Bitmap rotatedBitmap = Bitmap.createBitmap(bm,0,0,bmOptions.outWidth,bmOptions.outHeight,matrix,true);
+                ivFoto.setImageBitmap(rotatedBitmap);
+            } catch (IOException e) {
+
+            }
         }
     }
 }

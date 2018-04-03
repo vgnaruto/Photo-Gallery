@@ -4,35 +4,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
+
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/ll_judul">
-        <TextView
-            android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Judul"
-            android:textStyle="bold"/>
+            android:orientation="horizontal"
+            android:id="@+id/ll_judul">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Judul"
+                android:textStyle="bold"/>
+            <EditText
+                android:id="@+id/et_judul"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:hint="judul"/>
+        </LinearLayout>
         <EditText
-            android:id="@+id/et_judul"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:hint="judul"/>
+            android:id="@+id/et_note"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_below="@id/ll_judul"
+            android:hint="Notes"
+            android:layout_weight="1"/>
+        <ImageView
+            android:id="@+id/iv_foto"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"/>
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="save"/>
     </LinearLayout>
-    <Button
-        android:id="@+id/button_save"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ll_judul"
-        android:text="save"/>
-    <ImageView
-        android:id="@+id/iv_foto"
-        android:layout_above="@id/button_camera"
-        android:layout_below="@id/button_save"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/button_camera"
         android:src="@android:drawable/ic_menu_camera"

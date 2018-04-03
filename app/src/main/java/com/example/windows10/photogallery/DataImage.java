@@ -5,20 +5,30 @@ package com.example.windows10.photogallery;
  */
 
 public class DataImage {
-    private String image;
+    private String path;
     private String judul;
+    private String note;
 
-    public DataImage(String image, String judul) {
-        this.image = image;
+    public DataImage(String path, String judul, String note) {
+        this.path = path;
         this.judul = judul;
+        this.note = note;
     }
 
-    public String getImage() {
-        return image;
+    public String getPath() {
+        return path;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String getJudul() {
