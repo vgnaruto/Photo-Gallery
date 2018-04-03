@@ -1,13 +1,9 @@
 package com.example.windows10.photogallery;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.View;
 import android.widget.ListView;
 
@@ -76,12 +72,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(this, Main2Activity.class);
             startActivity(intent);
         }
-    }
-
-    public Bitmap base64ToBitmap(String data) {
-        byte[] b = Base64.decode(data, Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
-        return bitmap;
     }
 
     public static MainActivity getInstance() {

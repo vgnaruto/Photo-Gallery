@@ -75,7 +75,6 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
             public void run() {
                 Intent intentExtra = getIntent();
                 Bundle bundle = intentExtra.getExtras();
-
                 if (bundle != null) {
                     statusSama = 1;
                     String data = bundle.getString("data");
