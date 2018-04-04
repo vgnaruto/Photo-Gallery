@@ -15,12 +15,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static MainActivity instance;
     private static int isNew = 0;
     public static DataImage oldData = null;
-    public static int indeks = -1;
+    public static int status = -1;
 
     private FloatingActionButton addButton;
     private ListView listFoto;
     private FotoAdapter fa;
-    private DBAdapter dbAdapter;
+    private StorageManagerHelper smHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,17 +31,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addButton = findViewById(R.id.button_add);
         addButton.setOnClickListener(this);
 
-        dbAdapter = new DBAdapter(this);
-
-
         Intent intentExtra = getIntent();
         Bundle bundle = intentExtra.getExtras();
+
+        smHelper = new StorageManagerHelper(this);
 
         fa = new FotoAdapter(this);
         listFoto.setAdapter(fa);
         if(isNew == 0){
             isNew = 1;
-            fa.setDataImages(dbAdapter.read());
+            fa.setDataImages(smHelper.load());
         }
 
         if (bundle != null) {
@@ -51,15 +50,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //INSERT
             if (Main2Activity.statusSama == 0) {
                 fa.addFoto(currentData);
-                dbAdapter.insertData(currentData);
+                smHelper.save(currentData);
             }
             //EDIT
-            else if (Main2Activity.statusSama == 1 && MainActivity.indeks != -1) {
-                fa.updateFoto(currentData, MainActivity.indeks);
-                dbAdapter.update(MainActivity.oldData, currentData);
+            else if (Main2Activity.statusSama == 1 && MainActivity.status != -1) {
+                fa.updateFoto(currentData, MainActivity.status);
+                smHelper.save(MainActivity.oldData, currentData);
                 MainActivity.oldData = null;
                 Main2Activity.statusSama = 0;
-                MainActivity.indeks = -1;
+                MainActivity.status = -1;
             }
         }
         fa.presenter.loadData();
@@ -84,14 +83,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void edit(Bundle dataBundle, int indeks) {
-        MainActivity.indeks = indeks;
+        MainActivity.status = indeks;
         Intent acitivityIntent = new Intent(this, Main2Activity.class);
         acitivityIntent.putExtras(dataBundle);
         startActivity(acitivityIntent);
     }
 
     public void delete(DataImage data) {
-        dbAdapter.delete(data);
+        smHelper.delete(data);
     }
 
     @Override
